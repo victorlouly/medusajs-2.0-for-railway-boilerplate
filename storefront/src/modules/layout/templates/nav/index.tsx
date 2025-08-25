@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 import { 
+  revalidateTag,
   Search, 
   User, 
   ShoppingCart, 
@@ -12,7 +13,12 @@ import {
   Gamepad2,
   Book,
   Car,
-  Heart,
+  Apple,
+  Laptop,
+  Smartphone,
+  Package,
+  ShoppingBag,
+  Monitor,
   Utensils,
   Baby,
   Dumbbell,
@@ -33,51 +39,28 @@ import Image from "next/image"
 
 // Mapeamento de ícones para categorias
 const getCategoryIcon = (categoryName: string) => {
-  const name = categoryName.toLowerCase()
-  
-  if (name.includes('roupa') || name.includes('vestuário') || name.includes('moda')) {
-    return <Shirt className="w-4 h-4 text-white" />
-  }
-  if (name.includes('eletrônico') || name.includes('tecnologia') || name.includes('celular')) {
-    return <Smartphone className="w-4 h-4 text-white" />
-  }
-  if (name.includes('casa') || name.includes('lar') || name.includes('decoração')) {
-    return <Home className="w-4 h-4 text-white" />
-  }
-  if (name.includes('game') || name.includes('jogo') || name.includes('brinquedo')) {
-    return <Gamepad2 className="w-4 h-4 text-white" />
-  }
-  if (name.includes('livro') || name.includes('educação') || name.includes('papelaria')) {
-    return <Book className="w-4 h-4 text-white" />
-  }
-  if (name.includes('auto') || name.includes('carro') || name.includes('veículo')) {
-    return <Car className="w-4 h-4 text-white" />
-  }
-  if (name.includes('saúde') || name.includes('beleza') || name.includes('cosmético')) {
-    return <Heart className="w-4 h-4 text-white" />
-  }
-  if (name.includes('alimentação') || name.includes('comida') || name.includes('bebida')) {
-    return <Utensils className="w-4 h-4 text-white" />
-  }
-  if (name.includes('bebê') || name.includes('infantil') || name.includes('criança')) {
-    return <Baby className="w-4 h-4 text-white" />
-  }
-  if (name.includes('esporte') || name.includes('fitness') || name.includes('academia')) {
-    return <Dumbbell className="w-4 h-4 text-white" />
-  }
-  if (name.includes('arte') || name.includes('artesanato') || name.includes('hobby')) {
-    return <Palette className="w-4 h-4 text-white" />
-  }
-  if (name.includes('escritório') || name.includes('negócio') || name.includes('profissional')) {
-    return <Briefcase className="w-4 h-4 text-white" />
-  }
-  if (name.includes('presente') || name.includes('gift') || name.includes('lembrança')) {
-    return <Gift className="w-4 h-4 text-white" />
+  // Mapeamento específico baseado nos nomes exatos das categorias do admin
+  const iconMap: Record<string, JSX.Element> = {
+    'Produtos Apple': <Apple className="w-4 h-4 text-white" />,
+    'Notebooks': <Laptop className="w-4 h-4 text-white" />,
+    'Celulares': <Smartphone className="w-4 h-4 text-white" />,
+    'Lotes': <Package className="w-4 h-4 text-white" />,
+    'Outros Produtos': <ShoppingBag className="w-4 h-4 text-white" />,
   }
   
-  // Ícone padrão
-  return <Zap className="w-4 h-4 text-white" />
+  // Retorna o ícone específico ou um ícone padrão
+  return iconMap[categoryName] || <ShoppingCart className="w-4 h-4 text-white" />
 }
+
+// Função para revalidar o cache das categorias
+const revalidateCategories = async () => {
+  try {
+    await fetch('/api/revalidate?tag=categories', { method: 'POST' })
+  } catch (error) {
+    console.error('Erro ao revalidar categorias:', error)
+  }
+}
+  
 
 // Tradução de categorias para português (caso venham em inglês)
 const translateCategory = (categoryName: string) => {
@@ -104,12 +87,16 @@ const translateCategory = (categoryName: string) => {
     }
   }
   
+  // Retorna o nome original se não encontrar tradução
   return categoryName
 }
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
   const categories = await listCategories()
+
+  // Log para debug - ver quais categorias estão sendo carregadas
+  console.log('Categorias carregadas:', categories?.map(c => ({ id: c.id, name: c.name, handle: c.handle })))
 
   // Filtrar apenas categorias principais (sem parent)
   const mainCategories = categories?.filter(category => !category.parent_category) || []
@@ -227,7 +214,7 @@ export default async function Nav() {
                       <div className="w-6 h-6 bg-blue-600 rounded-sm flex items-center justify-center">
                         {getCategoryIcon(category.name)}
                       </div>
-                      <span className="font-medium">{translateCategory(category.name)}</span>
+                      <span className="font-medium">{category.name}</span>
                       {category.category_children && category.category_children.length > 0 && (
                         <ChevronDown className="w-4 h-4" />
                       )}
@@ -240,7 +227,7 @@ export default async function Nav() {
                     {category.products && category.products.length > 0 && (
                       <div className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-lg py-4 min-w-96 max-w-4xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div className="px-4 pb-3 border-b border-gray-200">
-                          <h3 className="font-semibold text-lg text-gray-900">{translateCategory(category.name)}</h3>
+                          <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
                           <p className="text-sm text-gray-600">Confira nossos produtos em destaque desta categoria</p>
                         </div>
                         
@@ -284,7 +271,7 @@ export default async function Nav() {
                               href={`/categories/${category.handle}`}
                               className="block text-center text-blue-600 hover:text-blue-800 font-medium text-sm"
                             >
-                              Ver todos os produtos de {translateCategory(category.name)} →
+                              Ver todos os produtos de {category.name} →
                             </LocalizedClientLink>
                           </div>
                         </div>
