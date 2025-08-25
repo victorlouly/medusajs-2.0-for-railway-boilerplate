@@ -15,7 +15,6 @@ import {
   Car,
   Apple,
   Laptop,
-  Smartphone,
   Package,
   ShoppingBag,
   Monitor,
