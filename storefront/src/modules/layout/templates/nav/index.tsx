@@ -285,7 +285,7 @@ export default async function Nav() {
                               className="block text-center text-blue-600 hover:text-blue-800 font-medium text-sm"
                             >
                               Ver todos os produtos de {translateCategory(category.name)} →
-                              {translateCategory(subCategory.name)}
+                            </LocalizedClientLink>
                           </div>
                         </div>
                       </div>
