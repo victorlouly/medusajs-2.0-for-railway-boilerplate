@@ -3,10 +3,12 @@ import { Search, User, ShoppingCart, Phone, MapPin, ChevronDown } from "lucide-r
 
 import { listRegions } from "@lib/data/regions"
 import { listCategories } from "@lib/data/categories"
+import { getProductsList } from "@lib/data/products"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
+import Image from "next/image"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
@@ -14,6 +16,24 @@ export default async function Nav() {
 
   // Filtrar apenas categorias principais (sem parent)
   const mainCategories = categories?.filter(category => !category.parent_category) || []
+
+  // Buscar produtos para cada categoria principal
+  const categoriesWithProducts = await Promise.all(
+    mainCategories.map(async (category) => {
+      const { response } = await getProductsList({
+        queryParams: { 
+          category_id: [category.id],
+          limit: 6 // Limitar a 6 produtos por categoria
+        },
+        countryCode: 'us' // Usar um país padrão
+      })
+      
+      return {
+        ...category,
+        products: response.products
+      }
+    })
+  )
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
@@ -100,8 +120,8 @@ export default async function Nav() {
         <div className="bg-blue-400 text-white">
           <div className="content-container">
             <nav className="flex items-center space-x-8 py-3">
-              {mainCategories.length > 0 ? (
-                mainCategories.map((category) => (
+              {categoriesWithProducts.length > 0 ? (
+                categoriesWithProducts.map((category) => (
                   <div key={category.id} className="relative group">
                     <LocalizedClientLink
                       href={`/categories/${category.handle}`}
@@ -114,10 +134,68 @@ export default async function Nav() {
                       {category.category_children && category.category_children.length > 0 && (
                         <ChevronDown className="w-4 h-4" />
                       )}
+                      {category.products && category.products.length > 0 && (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
                     </LocalizedClientLink>
                     
-                    {/* Submenu para subcategorias */}
-                    {category.category_children && category.category_children.length > 0 && (
+                    {/* Submenu com produtos */}
+                    {category.products && category.products.length > 0 && (
+                      <div className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-lg py-4 min-w-96 max-w-4xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        <div className="px-4 pb-3 border-b border-gray-200">
+                          <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
+                          <p className="text-sm text-gray-600">Confira nossos produtos em destaque</p>
+                        </div>
+                        
+                        <div className="p-4">
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                            {category.products.slice(0, 6).map((product) => (
+                              <LocalizedClientLink
+                                key={product.id}
+                                href={`/products/${product.handle}`}
+                                className="group/item flex flex-col items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                              >
+                                <div className="w-20 h-20 mb-2 bg-gray-100 rounded-lg overflow-hidden">
+                                  {product.thumbnail ? (
+                                    <Image
+                                      src={product.thumbnail}
+                                      alt={product.title}
+                                      width={80}
+                                      height={80}
+                                      className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-200"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                      <span className="text-gray-400 text-xs">Sem imagem</span>
+                                    </div>
+                                  )}
+                                </div>
+                                <h4 className="text-xs font-medium text-center text-gray-900 line-clamp-2 group-hover/item:text-blue-600">
+                                  {product.title}
+                                </h4>
+                                {product.variants && product.variants[0]?.calculated_price && (
+                                  <p className="text-xs text-blue-600 font-semibold mt-1">
+                                    R$ {(product.variants[0].calculated_price.calculated_amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                  </p>
+                                )}
+                              </LocalizedClientLink>
+                            ))}
+                          </div>
+                          
+                          <div className="border-t border-gray-200 pt-3">
+                            <LocalizedClientLink
+                              href={`/categories/${category.handle}`}
+                              className="block text-center text-blue-600 hover:text-blue-800 font-medium text-sm"
+                            >
+                              Ver todos os produtos de {category.name} →
+                            </LocalizedClientLink>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Submenu para subcategorias (mantido como estava) */}
+                    {category.category_children && category.category_children.length > 0 && !category.products?.length && (
                       <div className="absolute top-full left-0 bg-white text-gray-800 shadow-lg rounded-md py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                         {category.category_children.map((subCategory) => (
                           <LocalizedClientLink

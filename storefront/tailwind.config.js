@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 const path = require("path")
 
 module.exports = {
@@ -158,5 +159,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [
+    require("tailwindcss-radix")(),
+    require("@tailwindcss/line-clamp"),
+  ],
 }
