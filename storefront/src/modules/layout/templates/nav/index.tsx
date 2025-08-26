@@ -133,10 +133,13 @@ export default async function Nav() {
             {/* Logo */}
             <div className="flex items-center">
               <LocalizedClientLink href="/" className="flex items-center">
-                <div className="bg-blue-600 text-white px-3 py-2 rounded mr-2">
-                  <span className="font-bold text-lg">OTH</span>
-                </div>
-                <span className="text-blue-600 font-semibold text-lg">PRODUTOS</span>
+                <Image
+                  src="/logo.png"
+                  alt="OTH Produtos Logo"
+                  width={160}
+                  height={45}
+                  priority
+                />
               </LocalizedClientLink>
             </div>
 
