@@ -25,9 +25,7 @@ import {
   Briefcase,
   Gift,
   Zap,
-  Heart,
-  Menu,
-  CreditCard // <-- A CORREÇÃO ESTÁ AQUI: ÍCONE ADICIONADO À IMPORTAÇÃO
+  Heart // Ícone de favoritos
 } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
@@ -48,8 +46,6 @@ const getCategoryIcon = (categoryName: string) => {
     'Celulares': <Smartphone className="w-4 h-4" />,
     'Lotes': <Package className="w-4 h-4" />,
     'Outros Produtos': <ShoppingBag className="w-4 h-4" />,
-    'Ofertas': <Zap className="w-4 h-4" />, // Adicionando ícone para ofertas
-    'Retire na Loja': <MapPin className="w-4 h-4" />, // Adicionando ícone para retirada em loja
   }
   
   // Retorna o ícone específico ou um ícone padrão
@@ -122,46 +118,29 @@ export default async function Nav() {
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
       {/* Barra promocional */}
-      <div className="bg-blue-900 text-white text-center py-2 text-sm flex justify-center items-center space-x-8">
-        <span className="flex items-center">
-          <Zap size={16} className="text-yellow-300 mr-2" />
-          Promoção especial: Produtos com até 40% OFF. APROVEITE!!
-        </span>
-        <span className="hidden md:flex items-center">
-          <CreditCard size={16} className="text-white mr-2" />
-          Parcelamento em até 12x no cartão
-        </span>
+      <div className="bg-blue-900 text-white text-center py-2 text-sm">
+        PAGANDO COM PIX VOCÊ GANHA 10% EM DESCONTO
       </div>
 
       {/* Header principal */}
       <header className="relative bg-white border-b duration-200 border-ui-border-base">
         <div className="content-container">
-          {/* Primeira linha - Logo, Localização (simulada), Busca, Favoritos, Login, Carrinho */}
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
-            <div className="flex items-center">
+            <div className="flex-shrink-0">
               <LocalizedClientLink href="/" className="flex items-center">
                 <Image
                   src="/logo.png"
                   alt="OTH Produtos Logo"
-                  width={160} // Ajuste conforme necessário
-                  height={45} // Ajuste conforme necessário
+                  width={160}
+                  height={45}
                   priority
                 />
               </LocalizedClientLink>
             </div>
 
-            {/* Simulação de Localização (como na Zema) */}
-            <div className="hidden lg:flex items-center ml-8 text-sm text-gray-700 cursor-pointer hover:text-blue-600 group">
-              <MapPin size={20} className="mr-1 text-gray-500 group-hover:text-blue-600" />
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-500">Localização</span>
-                <span className="font-medium">São José dos Campos <ChevronDown size={14} className="inline ml-1" /></span>
-              </div>
-            </div>
-
             {/* Barra de busca central */}
-            <div className="flex-1 max-w-2xl mx-4 md:mx-8">
+            <div className="flex-1 max-w-xl mx-4 md:mx-8">
               <div className="relative">
                 <input
                   type="text"
@@ -179,23 +158,23 @@ export default async function Nav() {
             {/* Ícones de Ação (Favoritos, Login, Carrinho) */}
             <div className="flex items-center space-x-4 md:space-x-6">
               {/* Favoritos */}
-              <LocalizedClientLink href="/wishlist" className="hidden sm:flex flex-col items-center text-gray-600 hover:text-blue-600">
+              <LocalizedClientLink href="/wishlist" className="flex flex-col items-center text-blue-400 hover:text-blue-600">
                 <Heart size={24} />
-                <span className="text-xs mt-1">Favoritos</span>
+                <span className="hidden sm:block text-xs mt-1">Favoritos</span>
               </LocalizedClientLink>
 
               {/* Login/Cadastro */}
-              <LocalizedClientLink href="/account" className="flex flex-col items-center text-gray-600 hover:text-blue-600">
+              <LocalizedClientLink href="/account" className="flex flex-col items-center text-blue-400 hover:text-blue-600">
                 <User size={24} />
                 <span className="hidden sm:block text-xs mt-1">Login</span>
               </LocalizedClientLink>
 
               {/* Carrinho */}
-              <div className="relative">
+              <div className="relative text-blue-400 hover:text-blue-600">
                 <Suspense
                   fallback={
                     <LocalizedClientLink
-                      className="flex flex-col items-center text-gray-600 hover:text-blue-600"
+                      className="flex flex-col items-center"
                       href="/cart"
                       data-testid="nav-cart-link"
                     >
@@ -214,55 +193,36 @@ export default async function Nav() {
           </div>
         </div>
 
-        {/* Navegação por categorias (linha de baixo) */}
+        {/* Navegação por categorias (revertido ao estado anterior) */}
         <div className="bg-white text-black border-b border-t">
           <div className="content-container">
-            <nav className="flex items-center py-3 space-x-6">
-              {/* Botão Todas as Categorias */}
-              <div className="relative group bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer flex items-center space-x-2">
-                <Menu size={20} />
-                <span className="font-semibold text-gray-800">Todas as categorias</span>
-                <ChevronDown size={16} />
-                
-                {/* Dropdown de Todas as Categorias */}
-                <div className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-lg py-3 min-w-[250px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                  {categories?.map((category) => (
-                    <LocalizedClientLink
-                      key={category.id}
-                      href={`/categories/${category.handle}`}
-                      className="block px-4 py-2 hover:bg-gray-100 text-sm"
-                    >
-                      {category.name}
-                    </LocalizedClientLink>
-                  ))}
-                </div>
-              </div>
-
-              {/* Categorias principais */}
+            <nav className="flex items-center justify-between py-3">
               {categoriesWithProducts.length > 0 ? (
-                categoriesWithProducts.slice(0, 5).map((category) => ( // Limitar a 5 categorias para caber na linha
+                categoriesWithProducts.map((category) => (
                   <div key={category.id} className="relative group">
                     <LocalizedClientLink
                       href={`/categories/${category.handle}`}
-                      className="flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium"
+                      className="flex items-center space-x-2 hover:bg-gray-100 px-3 py-2 rounded cursor-pointer"
                     >
-                      <span className="">{category.name}</span>
+                      <div className="w-6 h-6 flex items-center justify-center">
+                        {getCategoryIcon(category.name)}
+                      </div>
+                      <span className="font-medium">{category.name}</span>
                       {(category.category_children && category.category_children.length > 0 || category.products && category.products.length > 0) && (
                         <ChevronDown className="w-4 h-4" />
                       )}
                     </LocalizedClientLink>
                     
-                    {/* Submenu com produtos ou subcategorias */}
+                    {/* Submenu */}
                     {((category.products && category.products.length > 0) || (category.category_children && category.category_children.length > 0)) && (
                       <div className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-lg py-4 min-w-96 max-w-4xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div className="px-4 pb-3 border-b border-gray-200">
                           <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
                           {category.products && category.products.length > 0 && (
-                            <p className="text-sm text-gray-600">Confira nossos produtos em destaque desta categoria</p>
+                            <p className="text-sm text-gray-600">Confira nossos produtos em destaque</p>
                           )}
                         </div>
                         
-                        {/* Exibir produtos ou subcategorias no submenu */}
                         {category.products && category.products.length > 0 ? (
                           <div className="p-4">
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
@@ -325,20 +285,10 @@ export default async function Nav() {
                   </div>
                 ))
               ) : (
-                // Fallback para quando não há categorias
-                <LocalizedClientLink href="/store" className="flex items-center space-x-3 hover:text-blue-600 px-3 py-2 rounded cursor-pointer">
-                  <span className="font-medium">Todos os Produtos</span>
+                <LocalizedClientLink href="/store" className="font-medium hover:text-blue-600">
+                  Todos os Produtos
                 </LocalizedClientLink>
               )}
-               {/* Adicionando "Ofertas" e "Retire na Loja" diretamente no nav para simular a referência */}
-               <LocalizedClientLink href="/offers" className="hidden lg:flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
-                <Zap size={16} />
-                <span>Ofertas</span>
-              </LocalizedClientLink>
-              <LocalizedClientLink href="/pickup-store" className="hidden lg:flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
-                <MapPin size={16} />
-                <span>Retire na Loja</span>
-              </LocalizedClientLink>
             </nav>
           </div>
         </div>
