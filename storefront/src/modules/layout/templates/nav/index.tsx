@@ -24,7 +24,9 @@ import {
   Palette,
   Briefcase,
   Gift,
-  Zap
+  Zap,
+  Heart, // Adicionando ícone de favoritos
+  Menu // Ícone para "Todas as categorias"
 } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
@@ -45,6 +47,8 @@ const getCategoryIcon = (categoryName: string) => {
     'Celulares': <Smartphone className="w-4 h-4" />,
     'Lotes': <Package className="w-4 h-4" />,
     'Outros Produtos': <ShoppingBag className="w-4 h-4" />,
+    'Ofertas': <Zap className="w-4 h-4" />, // Adicionando ícone para ofertas
+    'Retire na Loja': <MapPin className="w-4 h-4" />, // Adicionando ícone para retirada em loja
   }
   
   // Retorna o ícone específico ou um ícone padrão
@@ -120,15 +124,24 @@ export default async function Nav() {
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
-      {/* Barra promocional */}
-      <div className="bg-blue-900 text-white text-center py-2 text-sm">
-        PAGANDO COM PIX VOCÊ GANHA 10% EM DESCONTO
+      {/* Barra promocional (manter como está) */}
+      <div className="bg-blue-900 text-white text-center py-2 text-sm flex justify-center items-center space-x-8">
+        <span className="flex items-center">
+          <Zap size={16} className="text-yellow-300 mr-2" />
+          Promoção especial Zema: Produtos com até 40% OFF. APROVEITE!!
+          <span className="ml-2">>>></span>
+        </span>
+        <span className="flex items-center">
+          <CreditCard size={16} className="text-white mr-2" /> {/* Adicionado ícone de cartão de crédito */}
+          Parcelamento em até 12x no cartão
+        </span>
       </div>
+
 
       {/* Header principal */}
       <header className="relative bg-white border-b duration-200 border-ui-border-base">
         <div className="content-container">
-          {/* Primeira linha - Logo, Busca, Atendimento, Login, Carrinho */}
+          {/* Primeira linha - Logo, Localização (simulada), Busca, Favoritos, Login, Carrinho */}
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
             <div className="flex items-center">
@@ -136,11 +149,20 @@ export default async function Nav() {
                 <Image
                   src="/logo.png"
                   alt="OTH Produtos Logo"
-                  width={160}
-                  height={45}
+                  width={160} // Ajuste conforme necessário
+                  height={45} // Ajuste conforme necessário
                   priority
                 />
               </LocalizedClientLink>
+            </div>
+
+            {/* Simulação de Localização (como na Zema) */}
+            <div className="flex items-center ml-8 text-sm text-gray-700 cursor-pointer hover:text-blue-600 group">
+              <MapPin size={20} className="mr-1 text-gray-500 group-hover:text-blue-600" />
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500">Localização</span>
+                <span className="font-medium">São José dos Campos <ChevronDown size={14} className="inline ml-1" /></span>
+              </div>
             </div>
 
             {/* Barra de busca central */}
@@ -148,7 +170,7 @@ export default async function Nav() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="O que deseja procurar?"
+                  placeholder="O que você procura?"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 <LocalizedClientLink href="/search">
@@ -159,24 +181,18 @@ export default async function Nav() {
               </div>
             </div>
 
-            {/* Ações do usuário */}
+            {/* Ícones de Ação (Favoritos, Login, Carrinho) */}
             <div className="flex items-center space-x-6">
-              {/* Central de Atendimento */}
-              <div className="flex items-center text-sm text-gray-600">
-                <Phone size={20} className="text-red-500 mr-2" />
-                <div>
-                  <div className="font-medium">Central de</div>
-                  <div>Atendimento</div>
-                </div>
-              </div>
+              {/* Favoritos */}
+              <LocalizedClientLink href="/wishlist" className="flex flex-col items-center text-gray-600 hover:text-blue-600">
+                <Heart size={24} />
+                <span className="text-xs mt-1">Favoritos</span>
+              </LocalizedClientLink>
 
               {/* Login/Cadastro */}
-              <LocalizedClientLink href="/account" className="flex items-center text-sm text-gray-600 hover:text-blue-600">
-                <User size={20} className="mr-2" />
-                <div>
-                  <div>Olá, bem-vindo(a)</div>
-                  <div className="font-medium">Entrar / Cadastrar</div>
-                </div>
+              <LocalizedClientLink href="/account" className="flex flex-col items-center text-gray-600 hover:text-blue-600">
+                <User size={24} />
+                <span className="text-xs mt-1">Login</span>
               </LocalizedClientLink>
 
               {/* Carrinho */}
@@ -184,12 +200,13 @@ export default async function Nav() {
                 <Suspense
                   fallback={
                     <LocalizedClientLink
-                      className="flex items-center text-orange-500"
+                      className="flex flex-col items-center text-gray-600 hover:text-blue-600"
                       href="/cart"
                       data-testid="nav-cart-link"
                     >
                       <ShoppingCart size={24} />
-                      <span className="ml-1 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                      <span className="text-xs mt-1">Carrinho</span>
+                      <span className="absolute -top-1 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                         0
                       </span>
                     </LocalizedClientLink>
@@ -202,113 +219,131 @@ export default async function Nav() {
           </div>
         </div>
 
-        {/* Navegação por categorias */}
+        {/* Navegação por categorias (linha de baixo) */}
         <div className="bg-white text-black border-b border-t">
           <div className="content-container">
-            <nav className="flex items-center justify-between py-3">
+            <nav className="flex items-center py-3 space-x-6">
+              {/* Botão Todas as Categorias */}
+              <div className="relative group bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md cursor-pointer flex items-center space-x-2">
+                <Menu size={20} />
+                <span className="font-semibold text-gray-800">Todas as categorias</span>
+                <ChevronDown size={16} />
+                
+                {/* Dropdown de Todas as Categorias */}
+                <div className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-lg py-3 min-w-[250px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                  {categories?.map((category) => (
+                    <LocalizedClientLink
+                      key={category.id}
+                      href={`/categories/${category.handle}`}
+                      className="block px-4 py-2 hover:bg-gray-100 text-sm"
+                    >
+                      {category.name}
+                    </LocalizedClientLink>
+                  ))}
+                </div>
+              </div>
+
+              {/* Categorias principais */}
               {categoriesWithProducts.length > 0 ? (
-                categoriesWithProducts.map((category) => (
+                categoriesWithProducts.slice(0, 5).map((category) => ( // Limitar a 5 categorias para caber na linha
                   <div key={category.id} className="relative group">
                     <LocalizedClientLink
                       href={`/categories/${category.handle}`}
-                      className="flex items-center space-x-2 hover:bg-gray-100 px-3 py-2 rounded cursor-pointer"
+                      className="flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium"
                     >
-                      <div className="w-6 h-6 flex items-center justify-center">
-                        {getCategoryIcon(category.name)}
-                      </div>
-                      <span className="font-medium">{category.name}</span>
-                      {category.category_children && category.category_children.length > 0 && (
-                        <ChevronDown className="w-4 h-4" />
-                      )}
-                      {category.products && category.products.length > 0 && (
+                      <span className="">{category.name}</span>
+                      {(category.category_children && category.category_children.length > 0 || category.products && category.products.length > 0) && (
                         <ChevronDown className="w-4 h-4" />
                       )}
                     </LocalizedClientLink>
                     
-                    {/* Submenu com produtos */}
-                    {category.products && category.products.length > 0 && (
+                    {/* Submenu com produtos ou subcategorias */}
+                    {((category.products && category.products.length > 0) || (category.category_children && category.category_children.length > 0)) && (
                       <div className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-lg py-4 min-w-96 max-w-4xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <div className="px-4 pb-3 border-b border-gray-200">
                           <h3 className="font-semibold text-lg text-gray-900">{category.name}</h3>
-                          <p className="text-sm text-gray-600">Confira nossos produtos em destaque desta categoria</p>
+                          {category.products && category.products.length > 0 && (
+                            <p className="text-sm text-gray-600">Confira nossos produtos em destaque desta categoria</p>
+                          )}
                         </div>
                         
-                        <div className="p-4">
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-                            {category.products.slice(0, 6).map((product) => (
-                              <LocalizedClientLink
-                                key={product.id}
-                                href={`/products/${product.handle}`}
-                                className="group/item flex flex-col items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-                              >
-                                <div className="w-20 h-20 mb-2 bg-gray-100 rounded-lg overflow-hidden">
-                                  {product.thumbnail ? (
-                                    <Image
-                                      src={product.thumbnail}
-                                      alt={product.title}
-                                      width={80}
-                                      height={80}
-                                      className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-200"
-                                    />
-                                  ) : (
-                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                      <span className="text-gray-400 text-xs">Sem imagem</span>
-                                    </div>
+                        {/* Exibir produtos ou subcategorias no submenu */}
+                        {category.products && category.products.length > 0 ? (
+                          <div className="p-4">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                              {category.products.slice(0, 6).map((product) => (
+                                <LocalizedClientLink
+                                  key={product.id}
+                                  href={`/products/${product.handle}`}
+                                  className="group/item flex flex-col items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                                >
+                                  <div className="w-20 h-20 mb-2 bg-gray-100 rounded-lg overflow-hidden">
+                                    {product.thumbnail ? (
+                                      <Image
+                                        src={product.thumbnail}
+                                        alt={product.title}
+                                        width={80}
+                                        height={80}
+                                        className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-200"
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                        <span className="text-gray-400 text-xs">Sem imagem</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <h4 className="text-xs font-medium text-center text-gray-900 line-clamp-2 group-hover/item:text-blue-600">
+                                    {product.title}
+                                  </h4>
+                                  {product.variants && product.variants[0]?.calculated_price && (
+                                    <p className="text-xs text-blue-600 font-semibold mt-1">
+                                      R$ {(product.variants[0].calculated_price.calculated_amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                    </p>
                                   )}
-                                </div>
-                                <h4 className="text-xs font-medium text-center text-gray-900 line-clamp-2 group-hover/item:text-blue-600">
-                                  {product.title}
-                                </h4>
-                                {product.variants && product.variants[0]?.calculated_price && (
-                                  <p className="text-xs text-blue-600 font-semibold mt-1">
-                                    R$ {(product.variants[0].calculated_price.calculated_amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                                  </p>
-                                )}
+                                </LocalizedClientLink>
+                              ))}
+                            </div>
+                            <div className="border-t border-gray-200 pt-3">
+                              <LocalizedClientLink
+                                href={`/categories/${category.handle}`}
+                                className="block text-center text-blue-600 hover:text-blue-800 font-medium text-sm"
+                              >
+                                Ver todos os produtos de {category.name} →
+                              </LocalizedClientLink>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="p-4">
+                            {category.category_children?.map((subCategory) => (
+                              <LocalizedClientLink
+                                key={subCategory.id}
+                                href={`/categories/${subCategory.handle}`}
+                                className="block px-4 py-2 hover:bg-gray-100 text-sm"
+                              >
+                                {subCategory.name}
                               </LocalizedClientLink>
                             ))}
                           </div>
-                          
-                          <div className="border-t border-gray-200 pt-3">
-                            <LocalizedClientLink
-                              href={`/categories/${category.handle}`}
-                              className="block text-center text-blue-600 hover:text-blue-800 font-medium text-sm"
-                            >
-                              Ver todos os produtos de {category.name} →
-                            </LocalizedClientLink>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Submenu para subcategorias (mantido como estava) */}
-                    {category.category_children && category.category_children.length > 0 && !category.products?.length && (
-                      <div className="absolute top-full left-0 bg-white text-gray-800 shadow-lg rounded-md py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        {category.category_children.map((subCategory) => (
-                          <LocalizedClientLink
-                            key={subCategory.id}
-                            href={`/categories/${subCategory.handle}`}
-                            className="block px-4 py-2 hover:bg-gray-100 text-sm"
-                          >
-                            {subCategory.name}
-                          </LocalizedClientLink>
-                        ))}
+                        )}
                       </div>
                     )}
                   </div>
                 ))
               ) : (
                 // Fallback para quando não há categorias
-                <>
-                  <div className="flex items-center space-x-3 hover:bg-gray-100 px-3 py-2 rounded cursor-pointer">
-                    <div className="w-6 h-6 flex items-center justify-center">
-                      <ShoppingCart className="w-4 h-4" />
-                    </div>
-                    <LocalizedClientLink href="/store" className="font-medium">
-                      Todos os Produtos
-                    </LocalizedClientLink>
-                  </div>
-                </>
+                <LocalizedClientLink href="/store" className="flex items-center space-x-3 hover:text-blue-600 px-3 py-2 rounded cursor-pointer">
+                  <span className="font-medium">Todos os Produtos</span>
+                </LocalizedClientLink>
               )}
+               {/* Adicionando "Ofertas" e "Retire na Loja" diretamente no nav para simular a referência */}
+               <LocalizedClientLink href="/offers" className="flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
+                <Zap size={16} />
+                <span>Ofertas</span>
+              </LocalizedClientLink>
+              <LocalizedClientLink href="/pickup-store" className="flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
+                <MapPin size={16} />
+                <span>Retire na Loja</span>
+              </LocalizedClientLink>
             </nav>
           </div>
         </div>
