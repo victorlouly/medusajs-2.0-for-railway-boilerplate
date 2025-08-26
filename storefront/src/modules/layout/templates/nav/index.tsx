@@ -1,31 +1,5 @@
 import { Suspense } from "react"
-import { 
-  revalidateTag,
-  Search, 
-  User, 
-  ShoppingCart, 
-  Phone, 
-  MapPin, 
-  ChevronDown,
-  Shirt,
-  Smartphone,
-  Home,
-  Gamepad2,
-  Book,
-  Car,
-  Apple,
-  Laptop,
-  Package,
-  ShoppingBag,
-  Monitor,
-  Utensils,
-  Baby,
-  Dumbbell,
-  Palette,
-  Briefcase,
-  Gift,
-  Zap
-} from "lucide-react"
+import { LucideTag as revalidateTag, Search, User, ShoppingCart, Phone, MapPin, ChevronDown, Shirt, Smartphone, Home, Gamepad2, Book, Car, Apple, Laptop, Package, ShoppingBag, Monitor, Utensils, Baby, Dumbbell, Palette, Briefcase, Gift, Zap } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
 import { listCategories } from "@lib/data/categories"
@@ -40,15 +14,15 @@ import Image from "next/image"
 const getCategoryIcon = (categoryName: string) => {
   // Mapeamento específico baseado nos nomes exatos das categorias do admin
   const iconMap: Record<string, JSX.Element> = {
-    'Produtos Apple': <Apple className="w-4 h-4 text-white" />,
-    'Notebooks': <Laptop className="w-4 h-4 text-white" />,
-    'Celulares': <Smartphone className="w-4 h-4 text-white" />,
-    'Lotes': <Package className="w-4 h-4 text-white" />,
-    'Outros Produtos': <ShoppingBag className="w-4 h-4 text-white" />,
+    'Produtos Apple': <Apple className="w-5 h-5 text-blue-100" />,
+    'Notebooks': <Laptop className="w-5 h-5 text-blue-100" />,
+    'Celulares': <Smartphone className="w-5 h-5 text-blue-100" />,
+    'Lotes': <Package className="w-5 h-5 text-blue-100" />,
+    'Outros Produtos': <ShoppingBag className="w-5 h-5 text-blue-100" />,
   }
   
   // Retorna o ícone específico ou um ícone padrão
-  return iconMap[categoryName] || <ShoppingCart className="w-4 h-4 text-white" />
+  return iconMap[categoryName] || <ShoppingCart className="w-5 h-5 text-blue-100" />
 }
 
 // Função para revalidar o cache das categorias
@@ -200,19 +174,19 @@ export default async function Nav() {
         </div>
 
         {/* Navegação por categorias */}
-        <div className="bg-blue-400 text-white">
+        <div className="bg-blue-400 text-white w-full">
           <div className="content-container">
-            <nav className="flex items-center space-x-8 py-3">
+            <nav className="flex items-center justify-between py-3 w-full">
               {categoriesWithProducts.length > 0 ? (
                 categoriesWithProducts.map((category) => (
                   <div key={category.id} className="relative group">
                     <LocalizedClientLink
                       href={`/categories/${category.handle}`}
-                      className="flex items-center space-x-2 hover:bg-blue-500 px-3 py-2 rounded cursor-pointer"
+                      className="flex items-center space-x-2 hover:bg-blue-500 px-4 py-2 rounded cursor-pointer flex-1 justify-center"
                     >
-                      <div className="w-6 h-6 bg-blue-600 rounded-sm flex items-center justify-center">
-                        {getCategoryIcon(category.name)}
-                      </div>
+                      {React.cloneElement(getCategoryIcon(category.name), {
+                        className: "w-5 h-5 text-blue-100"
+                      })}
                       <span className="font-medium">{category.name}</span>
                       {category.category_children && category.category_children.length > 0 && (
                         <ChevronDown className="w-4 h-4" />
@@ -296,10 +270,8 @@ export default async function Nav() {
               ) : (
                 // Fallback para quando não há categorias
                 <>
-                  <div className="flex items-center space-x-3 hover:bg-blue-500 px-3 py-2 rounded cursor-pointer">
-                    <div className="w-6 h-6 bg-blue-600 rounded-sm flex items-center justify-center">
-                      <ShoppingCart className="w-4 h-4 text-white" />
-                    </div>
+                  <div className="flex items-center space-x-3 hover:bg-blue-500 px-4 py-2 rounded cursor-pointer flex-1 justify-center">
+                    <ShoppingCart className="w-5 h-5 text-blue-100" />
                     <LocalizedClientLink href="/store" className="font-medium">
                       Todos os Produtos
                     </LocalizedClientLink>
