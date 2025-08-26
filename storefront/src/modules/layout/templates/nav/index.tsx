@@ -25,8 +25,9 @@ import {
   Briefcase,
   Gift,
   Zap,
-  Heart, // Adicionando ícone de favoritos
-  Menu // Ícone para "Todas as categorias"
+  Heart,
+  Menu,
+  CreditCard // <-- A CORREÇÃO ESTÁ AQUI: ÍCONE ADICIONADO À IMPORTAÇÃO
 } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
@@ -64,7 +65,6 @@ const revalidateCategories = async () => {
   }
 }
   
-
 // Tradução de categorias para português (caso venham em inglês)
 const translateCategory = (categoryName: string) => {
   const translations: Record<string, string> = {
@@ -98,9 +98,6 @@ export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
   const categories = await listCategories()
 
-  // Log para debug - ver quais categorias estão sendo carregadas
-  console.log('Categorias carregadas:', categories?.map(c => ({ id: c.id, name: c.name, handle: c.handle })))
-
   // Filtrar apenas categorias principais (sem parent)
   const mainCategories = categories?.filter(category => !category.parent_category) || []
 
@@ -124,19 +121,17 @@ export default async function Nav() {
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
-      {/* Barra promocional (manter como está) */}
+      {/* Barra promocional */}
       <div className="bg-blue-900 text-white text-center py-2 text-sm flex justify-center items-center space-x-8">
         <span className="flex items-center">
           <Zap size={16} className="text-yellow-300 mr-2" />
-          Promoção especial Zema: Produtos com até 40% OFF. APROVEITE!!
-          <span className="ml-2">>>></span>
+          Promoção especial: Produtos com até 40% OFF. APROVEITE!!
         </span>
-        <span className="flex items-center">
-          <CreditCard size={16} className="text-white mr-2" /> {/* Adicionado ícone de cartão de crédito */}
+        <span className="hidden md:flex items-center">
+          <CreditCard size={16} className="text-white mr-2" />
           Parcelamento em até 12x no cartão
         </span>
       </div>
-
 
       {/* Header principal */}
       <header className="relative bg-white border-b duration-200 border-ui-border-base">
@@ -157,7 +152,7 @@ export default async function Nav() {
             </div>
 
             {/* Simulação de Localização (como na Zema) */}
-            <div className="flex items-center ml-8 text-sm text-gray-700 cursor-pointer hover:text-blue-600 group">
+            <div className="hidden lg:flex items-center ml-8 text-sm text-gray-700 cursor-pointer hover:text-blue-600 group">
               <MapPin size={20} className="mr-1 text-gray-500 group-hover:text-blue-600" />
               <div className="flex flex-col">
                 <span className="text-xs text-gray-500">Localização</span>
@@ -166,7 +161,7 @@ export default async function Nav() {
             </div>
 
             {/* Barra de busca central */}
-            <div className="flex-1 max-w-2xl mx-8">
+            <div className="flex-1 max-w-2xl mx-4 md:mx-8">
               <div className="relative">
                 <input
                   type="text"
@@ -182,9 +177,9 @@ export default async function Nav() {
             </div>
 
             {/* Ícones de Ação (Favoritos, Login, Carrinho) */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4 md:space-x-6">
               {/* Favoritos */}
-              <LocalizedClientLink href="/wishlist" className="flex flex-col items-center text-gray-600 hover:text-blue-600">
+              <LocalizedClientLink href="/wishlist" className="hidden sm:flex flex-col items-center text-gray-600 hover:text-blue-600">
                 <Heart size={24} />
                 <span className="text-xs mt-1">Favoritos</span>
               </LocalizedClientLink>
@@ -192,7 +187,7 @@ export default async function Nav() {
               {/* Login/Cadastro */}
               <LocalizedClientLink href="/account" className="flex flex-col items-center text-gray-600 hover:text-blue-600">
                 <User size={24} />
-                <span className="text-xs mt-1">Login</span>
+                <span className="hidden sm:block text-xs mt-1">Login</span>
               </LocalizedClientLink>
 
               {/* Carrinho */}
@@ -205,7 +200,7 @@ export default async function Nav() {
                       data-testid="nav-cart-link"
                     >
                       <ShoppingCart size={24} />
-                      <span className="text-xs mt-1">Carrinho</span>
+                       <span className="hidden sm:block text-xs mt-1">Carrinho</span>
                       <span className="absolute -top-1 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                         0
                       </span>
@@ -313,7 +308,7 @@ export default async function Nav() {
                             </div>
                           </div>
                         ) : (
-                          <div className="p-4">
+                          <div className="py-2">
                             {category.category_children?.map((subCategory) => (
                               <LocalizedClientLink
                                 key={subCategory.id}
@@ -336,11 +331,11 @@ export default async function Nav() {
                 </LocalizedClientLink>
               )}
                {/* Adicionando "Ofertas" e "Retire na Loja" diretamente no nav para simular a referência */}
-               <LocalizedClientLink href="/offers" className="flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
+               <LocalizedClientLink href="/offers" className="hidden lg:flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
                 <Zap size={16} />
                 <span>Ofertas</span>
               </LocalizedClientLink>
-              <LocalizedClientLink href="/pickup-store" className="flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
+              <LocalizedClientLink href="/pickup-store" className="hidden lg:flex items-center space-x-2 hover:text-blue-600 px-2 py-2 rounded cursor-pointer text-sm font-medium">
                 <MapPin size={16} />
                 <span>Retire na Loja</span>
               </LocalizedClientLink>
