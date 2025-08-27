@@ -25,7 +25,8 @@ import {
   Briefcase,
   Gift,
   Zap,
-  Heart // Ícone de favoritos
+  Heart,
+  BadgePercent // Ícone adicionado para a promoção
 } from "lucide-react"
 
 import { listRegions } from "@lib/data/regions"
@@ -117,9 +118,10 @@ export default async function Nav() {
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
-      {/* Barra promocional */}
-      <div className="bg-blue-900 text-white text-center py-2 text-sm">
-        PAGANDO COM PIX VOCÊ GANHA 10% EM DESCONTO
+      {/* Barra promocional -- ALTERADA */}
+      <div className="bg-gray-900 text-white py-2 text-sm font-medium tracking-wider flex items-center justify-center gap-x-3">
+        <BadgePercent className="h-5 w-5" aria-hidden="true" />
+        <span>PAGANDO COM PIX VOCÊ GANHA 10% EM DESCONTO</span>
       </div>
 
       {/* Header principal */}
@@ -190,7 +192,7 @@ export default async function Nav() {
           </div>
         </div>
 
-        {/* Navegação por categorias (revertido ao estado anterior) */}
+        {/* Navegação por categorias */}
         <div className="bg-white text-black border-b border-t">
           <div className="content-container">
             <nav className="flex items-center justify-between py-3">
