@@ -1,153 +1,117 @@
 import { getCategoriesList } from "@lib/data/categories"
 import { getCollectionsList } from "@lib/data/collections"
-import { Text, clx } from "@medusajs/ui"
+import { Text } from "@medusajs/ui"
+import Image from "next/image"
+import { Facebook, Instagram, Twitter, Youtube } from "lucide-react"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import MedusaCTA from "@modules/layout/components/medusa-cta"
+
+// Ícones simples para formas de pagamento (exemplo)
+const PaymentMethods = () => (
+  <div className="flex items-center gap-x-4">
+    <div className="h-8 w-12 bg-gray-700 rounded-md flex items-center justify-center text-xs font-semibold">Visa</div>
+    <div className="h-8 w-12 bg-gray-700 rounded-md flex items-center justify-center text-xs font-semibold">Master</div>
+    <div className="h-8 w-12 bg-gray-700 rounded-md flex items-center justify-center text-xs font-semibold">Pix</div>
+  </div>
+)
 
 export default async function Footer() {
   const { collections } = await getCollectionsList(0, 6)
   const { product_categories } = await getCategoriesList(0, 6)
 
   return (
-    <footer className="border-t border-ui-border-base w-full">
+    <footer className="bg-gray-900 text-gray-300">
       <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
-          <div>
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
-            >
-              Medusa Store
+        {/* Seção Principal do Rodapé */}
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-y-16 py-16">
+          
+          {/* Coluna 1: Logo e Redes Sociais */}
+          <div className="flex flex-col gap-y-6 lg:col-span-2">
+            <LocalizedClientLink href="/" className="w-fit">
+              <Image
+                src="/logo.png" // Use o mesmo logo do header
+                alt="OTH Produtos Logo"
+                width={160}
+                height={45}
+                className="brightness-0 invert" // Inverte as cores do logo para ficar branco
+              />
             </LocalizedClientLink>
-          </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
-            {product_categories && product_categories?.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Categorias
-                </span>
-                <ul
-                  className="grid grid-cols-1 gap-2"
-                  data-testid="footer-categories"
-                >
-                  {product_categories?.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return
-                    }
-
-                    const children =
-                      c.category_children?.map((child) => ({
-                        name: child.name,
-                        handle: child.handle,
-                        id: child.id,
-                      })) || null
-
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className={clx(
-                            "hover:text-ui-fg-base",
-                            children && "txt-small-plus"
-                          )}
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                        {children && (
-                          <ul className="grid grid-cols-1 ml-3 gap-2">
-                            {children &&
-                              children.map((child) => (
-                                <li key={child.id}>
-                                  <LocalizedClientLink
-                                    className="hover:text-ui-fg-base"
-                                    href={`/categories/${child.handle}`}
-                                    data-testid="category-link"
-                                  >
-                                    {child.name}
-                                  </LocalizedClientLink>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )}
-            {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Coleções
-                </span>
-                <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
-                >
-                  {collections?.slice(0, 6).map((c) => (
-                    <li key={c.id}>
-                      <LocalizedClientLink
-                        className="hover:text-ui-fg-base"
-                        href={`/collections/${c.handle}`}
-                      >
-                        {c.title}
-                      </LocalizedClientLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base">Medusa</span>
-              <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
-                <li>
-                  <a
-                    href="https://github.com/medusajs"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://docs.medusajs.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/medusajs/nextjs-starter-medusa"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Source code
-                  </a>
-                </li>
-              </ul>
+            <p className="text-sm text-gray-400 max-w-sm">
+              Sua fonte confiável para produtos de alta qualidade, oferecendo as melhores marcas com entrega rápida e segura em todo o Brasil.
+            </p>
+            <div className="flex gap-x-4 items-center">
+              <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors"><Facebook size={20} /></a>
+              <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors"><Instagram size={20} /></a>
+              <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+              <a href="#" aria-label="YouTube" className="text-gray-400 hover:text-white transition-colors"><Youtube size={20} /></a>
             </div>
           </div>
+
+          {/* Coluna 2: Categorias */}
+          {product_categories && product_categories?.length > 0 && (
+            <div className="flex flex-col gap-y-4">
+              <span className="font-semibold text-white uppercase tracking-wider">
+                Categorias
+              </span>
+              <ul className="flex flex-col gap-y-2 text-sm">
+                {product_categories?.slice(0, 6).map((c) => {
+                  if (c.parent_category) {
+                    return null
+                  }
+                  return (
+                    <li key={c.id}>
+                      <LocalizedClientLink
+                        className="text-gray-400 hover:text-white transition-colors"
+                        href={`/categories/${c.handle}`}
+                      >
+                        {c.name}
+                      </LocalizedClientLink>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
+
+          {/* Coluna 3: Coleções */}
+          {collections && collections.length > 0 && (
+            <div className="flex flex-col gap-y-4">
+              <span className="font-semibold text-white uppercase tracking-wider">
+                Coleções
+              </span>
+              <ul className="flex flex-col gap-y-2 text-sm">
+                {collections?.slice(0, 6).map((c) => (
+                  <li key={c.id}>
+                    <LocalizedClientLink
+                      className="text-gray-400 hover:text-white transition-colors"
+                      href={`/collections/${c.handle}`}
+                    >
+                      {c.title}
+                    </LocalizedClientLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Coluna 4: Atendimento */}
+          <div className="flex flex-col gap-y-4">
+            <span className="font-semibold text-white uppercase tracking-wider">Atendimento</span>
+            <ul className="flex flex-col gap-y-2 text-sm">
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Fale Conosco</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Política de Devolução</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Rastrear Pedido</a></li>
+            </ul>
+          </div>
         </div>
-        <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
-          <Text className="txt-compact-small">
-            © {new Date().getFullYear()} Medusa Store. All rights reserved.
+
+        {/* Barra Inferior: Copyright e Pagamentos */}
+        <div className="flex flex-col md:flex-row w-full py-8 justify-between items-center gap-8 border-t border-gray-800">
+          <Text className="text-sm text-gray-500">
+            © {new Date().getFullYear()} OTH Produtos. Todos os direitos reservados.
           </Text>
-          <MedusaCTA />
+          <PaymentMethods />
         </div>
       </div>
     </footer>
