@@ -38,7 +38,8 @@ const BannerCarousel = () => {
   }, [])
 
   return (
-    <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+    // Adicionado um fundo cinza para preencher o espaço vazio caso a imagem não ocupe 100%
+    <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gray-100">
       {/* Slides */}
       <div 
         className="flex transition-transform duration-700 ease-in-out h-full"
@@ -56,7 +57,8 @@ const BannerCarousel = () => {
               src={banner.image}
               alt={banner.alt}
               fill
-              className="object-cover"
+              // ALTERADO AQUI: de 'object-cover' para 'object-contain'
+              className="object-contain"
               priority={index === 0}
               sizes="100vw"
             />
