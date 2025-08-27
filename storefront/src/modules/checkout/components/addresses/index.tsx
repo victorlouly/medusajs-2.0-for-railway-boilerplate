@@ -56,7 +56,7 @@ const Addresses = ({
             })} />
           </div>
           <Heading level="h2" className="text-xl font-semibold text-gray-900">
-            Endereço de Entrega
+            Endereços
           </Heading>
           {!isOpen && cart?.shipping_address && <CheckCircle className="w-5 h-5 text-green-600" />}
         </div>
@@ -99,7 +99,7 @@ const Addresses = ({
             
             <div className="mt-8">
               <SubmitButton className="w-full h-12 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium transition-colors" data-testid="submit-address-button">
-                Continuar para Entrega
+                Continuar para a Entrega
               </SubmitButton>
             </div>
             

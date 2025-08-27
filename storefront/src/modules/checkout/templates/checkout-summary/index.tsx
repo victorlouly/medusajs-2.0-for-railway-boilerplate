@@ -14,7 +14,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
           <ShoppingBag className="w-4 h-4 text-gray-600" />
         </div>
         <Heading level="h2" className="text-xl font-semibold text-gray-900">
-          Resumo do Pedido
+          Resumo
         </Heading>
       </div>
       
