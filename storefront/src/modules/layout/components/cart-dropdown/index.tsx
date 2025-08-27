@@ -71,18 +71,13 @@ const CartDropdown = ({
 
   return (
     <div
-      className="h-full z-50"
+      className="h-full" // A classe z-50 aqui não é mais necessária, pois a adicionamos ao painel
       onMouseEnter={openAndCancel}
       onMouseLeave={close}
     >
       <Popover className="relative h-full">
-        <Popover.Button className="h-full">
-          <LocalizedClientLink
-            className="hover:text-ui-fg-base"
-            href="/cart"
-            data-testid="nav-cart-link"
-          >{`Cart (${totalItems})`}</LocalizedClientLink>
-        </Popover.Button>
+        {/* O BOTÃO AGORA NÃO TEM TEXTO, APENAS ATIVA O POPOVER */}
+        <Popover.Button className="h-full" />
         <Transition
           show={cartDropdownOpen}
           as={Fragment}
@@ -95,7 +90,8 @@ const CartDropdown = ({
         >
           <Popover.Panel
             static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
+            // ADICIONADO z-50 PARA GARANTIR QUE FIQUE NA FRENTE
+            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base z-50"
             data-testid="nav-cart-dropdown"
           >
             <div className="p-4 flex items-center justify-center">
