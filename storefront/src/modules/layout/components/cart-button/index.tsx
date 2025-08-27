@@ -25,7 +25,7 @@ export default async function CartButton() {
 
   return (
     <div className="relative">
-      <div className="flex items-center text-orange-500">
+      <div className="flex items-center"> {/* ALTERAÇÃO AQUI */}
         <ShoppingCart size={24} />
         <span className="ml-1 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
           {totalItems}
