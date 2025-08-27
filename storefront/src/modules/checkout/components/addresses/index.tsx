@@ -92,15 +92,17 @@ const Addresses = ({
                     Endereço de Cobrança
                   </Heading>
                 </div>
-                
-                </Heading>
 
                 <BillingAddress cart={cart} />
               </div>
             )}
-            <SubmitButton className="w-full h-12 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium transition-colors" data-testid="submit-address-button">
-              Continuar para Entrega
-            </SubmitButton>
+            
+            <div className="mt-8">
+              <SubmitButton className="w-full h-12 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium transition-colors" data-testid="submit-address-button">
+                Continuar para Entrega
+              </SubmitButton>
+            </div>
+            
             {message && (
               <div className="text-sm text-red-600 mt-4" data-testid="address-error-message">
                 {message}
