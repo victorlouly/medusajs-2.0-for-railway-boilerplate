@@ -71,12 +71,12 @@ const CartDropdown = ({
 
   return (
     <div
-      className="h-full" // A classe z-50 aqui não é mais necessária, pois a adicionamos ao painel
+      // ALTERAÇÃO AQUI: Torna a área de hover absoluta e invisível, corrigindo o alinhamento
+      className="absolute inset-0"
       onMouseEnter={openAndCancel}
       onMouseLeave={close}
     >
       <Popover className="relative h-full">
-        {/* O BOTÃO AGORA NÃO TEM TEXTO, APENAS ATIVA O POPOVER */}
         <Popover.Button className="h-full" />
         <Transition
           show={cartDropdownOpen}
@@ -90,7 +90,6 @@ const CartDropdown = ({
         >
           <Popover.Panel
             static
-            // ADICIONADO z-50 PARA GARANTIR QUE FIQUE NA FRENTE
             className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base z-50"
             data-testid="nav-cart-dropdown"
           >

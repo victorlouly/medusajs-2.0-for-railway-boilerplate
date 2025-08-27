@@ -24,13 +24,19 @@ export default async function CartButton() {
   const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0
 
   return (
-    <div className="relative">
-      <div className="flex items-center"> {/* ALTERAÇÃO AQUI */}
-        <ShoppingCart size={24} />
-        <span className="ml-1 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+    <div className="relative flex items-center h-full">
+      <ShoppingCart size={24} />
+      
+      {totalItems > 0 && (
+        <span
+          className="absolute -top-2 -right-3 bg-white text-black border border-black rounded-full w-5 h-5 flex items-center justify-center text-xs"
+          data-testid="cart-count"
+        >
           {totalItems}
         </span>
-      </div>
+      )}
+      
+      {/* O CartDropdown ficará invisível aqui, apenas para a funcionalidade de hover */}
       <CartDropdown cart={cart} />
     </div>
   )
