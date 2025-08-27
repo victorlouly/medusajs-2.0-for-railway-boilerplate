@@ -158,28 +158,25 @@ export default async function Nav() {
             {/* Ícones de Ação (Favoritos, Login, Carrinho) */}
             <div className="flex items-center space-x-4 md:space-x-6">
               {/* Favoritos */}
-              <LocalizedClientLink href="/wishlist" className="flex flex-col items-center text-blue-400 hover:text-blue-600">
+              <LocalizedClientLink href="/wishlist" className="text-black hover:text-gray-700">
                 <Heart size={24} />
-                <span className="hidden sm:block text-xs mt-1">Favoritos</span>
               </LocalizedClientLink>
 
               {/* Login/Cadastro */}
-              <LocalizedClientLink href="/account" className="flex flex-col items-center text-blue-400 hover:text-blue-600">
+              <LocalizedClientLink href="/account" className="text-black hover:text-gray-700">
                 <User size={24} />
-                <span className="hidden sm:block text-xs mt-1">Login</span>
               </LocalizedClientLink>
 
               {/* Carrinho */}
-              <div className="relative text-blue-400 hover:text-blue-600">
+              <div className="relative text-black hover:text-gray-700">
                 <Suspense
                   fallback={
                     <LocalizedClientLink
-                      className="flex flex-col items-center"
+                      className="flex items-center"
                       href="/cart"
                       data-testid="nav-cart-link"
                     >
                       <ShoppingCart size={24} />
-                       <span className="hidden sm:block text-xs mt-1">Carrinho</span>
                       <span className="absolute -top-1 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                         0
                       </span>
