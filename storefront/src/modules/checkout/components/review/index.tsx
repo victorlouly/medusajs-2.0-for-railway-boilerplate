@@ -41,7 +41,7 @@ const Review = ({ cart }: { cart: any }) => {
                 Ao clicar no botão "Finalizar Pedido", você confirma que leu,
                 compreendeu e aceita nossos Termos de Uso, Termos de Venda e
                 Política de Devolução, e reconhece que leu a Política de
-                Privacidade da OTH Produtos.
+                Privacidade da x4.
               </Text>
             </div>
           </div>

@@ -133,7 +133,7 @@ export default async function Nav() {
               <LocalizedClientLink href="/" className="flex items-center">
                 <Image
                   src="/logo.png"
-                  alt="OTH Produtos Logo"
+                  alt="x4 Logo"
                   width={160}
                   height={45}
                   priority

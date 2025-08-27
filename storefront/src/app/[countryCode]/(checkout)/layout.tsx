@@ -31,7 +31,7 @@ export default function CheckoutLayout({
           >
             <img
               src="/logo.png"
-              alt="OTH Produtos"
+              alt="x4"
               className="h-8"
             />
           </LocalizedClientLink>
@@ -43,7 +43,7 @@ export default function CheckoutLayout({
         <div className="flex gap-x-2 txt-compact-small-plus items-center text-gray-500">
           Desenvolvido por
           <a href="https://othprodutos.com" target="_blank" rel="noreferrer" className="text-gray-700 hover:text-gray-900 font-medium">
-            OTH Produtos
+            x4
           </a>
         </div>
       </div>

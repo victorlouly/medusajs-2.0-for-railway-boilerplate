@@ -32,7 +32,7 @@ export default async function Footer() {
               {/* ALTERADO: Removido 'brightness-0 invert' para a logo aparecer em sua cor original */}
               <Image
                 src="/logo.png" 
-                alt="OTH Produtos Logo"
+                alt="x4 Logo"
                 width={160}
                 height={45}
               />
@@ -111,7 +111,7 @@ export default async function Footer() {
         {/* Barra Inferior: Copyright e Pagamentos */}
         <div className="flex flex-col md:flex-row w-full py-8 justify-between items-center gap-8 border-t border-gray-200">
           <Text className="text-sm text-gray-500">
-            © {new Date().getFullYear()} OTH Produtos. Todos os direitos reservados.
+            © {new Date().getFullYear()} x4. Todos os direitos reservados.
           </Text>
           {/* ALTERADO: Cores dos ícones de pagamento para combinar com o fundo branco */}
           <PaymentMethods />
