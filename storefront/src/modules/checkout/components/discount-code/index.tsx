@@ -1,14 +1,13 @@
 "use client"
 
-import { Badge, Heading, Input, Label, Text, Tooltip } from "@medusajs/ui"
+import { Badge, Heading, Input, Label, Text, Button } from "@medusajs/ui"
+import { Tag, X, Plus } from "lucide-react"
 import React from "react"
 import { useFormState } from "react-dom"
 
 import { applyPromotions, submitPromotionForm } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
-import { InformationCircleSolid } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import Trash from "@modules/common/icons/trash"
 import ErrorMessage from "../error-message"
 import { SubmitButton } from "../submit-button"
 
@@ -53,118 +52,102 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   const [message, formAction] = useFormState(submitPromotionForm, null)
 
   return (
-    <div className="w-full bg-white flex flex-col">
-      <div className="txt-medium">
-        <form action={(a) => addPromotionCode(a)} className="w-full mb-5">
-          <Label className="flex gap-x-1 my-2 items-center">
+    <div className="w-full">
+      <div className="space-y-4">
+        <form action={(a) => addPromotionCode(a)} className="w-full">
+          <div className="flex items-center gap-2 mb-3">
+            <Tag className="w-4 h-4 text-gray-500" />
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="txt-medium text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               data-testid="add-discount-button"
             >
-              Add Promotion Code(s)
+              {isOpen ? 'Cancelar' : 'Adicionar Cupom de Desconto'}
             </button>
+            {!isOpen && (
+              <Plus className="w-4 h-4 text-gray-500" />
+            )}
+          </div>
 
+          {isOpen && (
             {/* <Tooltip content="You can add multiple promotion codes">
               <InformationCircleSolid color="var(--fg-muted)" />
             </Tooltip> */}
-          </Label>
-
-          {isOpen && (
             <>
-              <div className="flex w-full gap-x-2">
+              <div className="flex gap-2">
                 <Input
-                  className="size-full"
+                  className="flex-1 h-10 rounded-lg border-gray-200 focus:border-gray-400 focus:ring-0"
                   id="promotion-input"
                   name="code"
                   type="text"
+                  placeholder="Digite seu cupom"
                   autoFocus={false}
                   data-testid="discount-input"
                 />
-                <SubmitButton
-                  variant="secondary"
+                <Button
+                  type="submit"
+                  className="px-6 h-10 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors"
                   data-testid="discount-apply-button"
                 >
-                  Apply
-                </SubmitButton>
+                  Aplicar
+                </Button>
               </div>
 
-              <ErrorMessage
-                error={message}
-                data-testid="discount-error-message"
-              />
+              {message && (
+                <div className="text-sm text-red-600 mt-2" data-testid="discount-error-message">
+                  {message}
+                </div>
+              )}
             </>
           )}
         </form>
 
         {promotions.length > 0 && (
-          <div className="w-full flex items-center">
-            <div className="flex flex-col w-full">
-              <Heading className="txt-medium mb-2">
-                Promotion(s) applied:
-              </Heading>
+          <div className="space-y-3">
+            <Text className="text-sm font-medium text-gray-700">
+              Cupons aplicados:
+            </Text>
 
-              {promotions.map((promotion) => {
-                return (
-                  <div
-                    key={promotion.id}
-                    className="flex items-center justify-between w-full max-w-full mb-2"
-                    data-testid="discount-row"
-                  >
-                    <Text className="flex gap-x-1 items-baseline txt-small-plus w-4/5 pr-1">
-                      <span className="truncate" data-testid="discount-code">
-                        <Badge
-                          color={promotion.is_automatic ? "green" : "grey"}
-                          size="small"
-                        >
-                          {promotion.code}
-                        </Badge>{" "}
-                        (
-                        {promotion.application_method?.value !== undefined &&
-                          promotion.application_method.currency_code !==
-                            undefined && (
-                            <>
-                              {promotion.application_method.type ===
-                              "percentage"
-                                ? `${promotion.application_method.value}%`
-                                : convertToLocale({
-                                    amount: promotion.application_method.value,
-                                    currency_code:
-                                      promotion.application_method
-                                        .currency_code,
-                                  })}
-                            </>
-                          )}
-                        )
-                        {/* {promotion.is_automatic && (
-                          <Tooltip content="This promotion is automatically applied">
-                            <InformationCircleSolid className="inline text-zinc-400" />
-                          </Tooltip>
-                        )} */}
-                      </span>
-                    </Text>
-                    {!promotion.is_automatic && (
-                      <button
-                        className="flex items-center"
-                        onClick={() => {
-                          if (!promotion.code) {
-                            return
-                          }
-
-                          removePromotionCode(promotion.code)
-                        }}
-                        data-testid="remove-discount-button"
-                      >
-                        <Trash size={14} />
-                        <span className="sr-only">
-                          Remove discount code from order
-                        </span>
-                      </button>
-                    )}
+            <div className="space-y-2">
+              {promotions.map((promotion) => (
+                <div
+                  key={promotion.id}
+                  className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3"
+                  data-testid="discount-row"
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-green-100 text-green-800 border-green-200">
+                      {promotion.code}
+                    </Badge>
+                    <span className="text-sm text-gray-600">
+                      {promotion.application_method?.value !== undefined &&
+                        promotion.application_method.currency_code !== undefined && (
+                          <>
+                            {promotion.application_method.type === "percentage"
+                              ? `${promotion.application_method.value}% de desconto`
+                              : `${convertToLocale({
+                                  amount: promotion.application_method.value,
+                                  currency_code: promotion.application_method.currency_code,
+                                })} de desconto`}
+                          </>
+                        )}
+                    </span>
                   </div>
-                )
-              })}
+                  {!promotion.is_automatic && (
+                    <button
+                      className="text-gray-400 hover:text-red-500 transition-colors"
+                      onClick={() => {
+                        if (!promotion.code) return
+                        removePromotionCode(promotion.code)
+                      }}
+                      data-testid="remove-discount-button"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         )}

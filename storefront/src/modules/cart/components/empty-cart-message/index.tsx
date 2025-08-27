@@ -1,22 +1,37 @@
-import { Heading, Text } from "@medusajs/ui"
+import { Heading, Text, Button } from "@medusajs/ui"
+import { ShoppingBag, ArrowRight } from "lucide-react"
 
-import InteractiveLink from "@modules/common/components/interactive-link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const EmptyCartMessage = () => {
   return (
-    <div className="py-48 px-2 flex flex-col justify-center items-start" data-testid="empty-cart-message">
-      <Heading
-        level="h1"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
-      >
-        Cart
+    <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4" data-testid="empty-cart-message">
+      <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-8">
+        <ShoppingBag className="w-12 h-12 text-gray-400" />
+      </div>
+      
+      <Heading level="h1" className="text-2xl font-semibold text-gray-900 mb-4">
+        Seu carrinho está vazio
       </Heading>
-      <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        You don&apos;t have anything in your cart. Let&apos;s change that, use
-        the link below to start browsing our products.
+      
+      <Text className="text-gray-600 mb-8 max-w-md">
+        Parece que você ainda não adicionou nenhum item ao seu carrinho. 
+        Que tal explorar nossos produtos incríveis?
       </Text>
-      <div>
-        <InteractiveLink href="/store">Explore products</InteractiveLink>
+      
+      <div className="space-y-4">
+        <LocalizedClientLink href="/store">
+          <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-medium flex items-center gap-2 transition-colors">
+            Explorar Produtos
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </LocalizedClientLink>
+        
+        <LocalizedClientLink href="/" className="block">
+          <Button variant="secondary" className="px-8 py-3 rounded-xl font-medium">
+            Voltar ao Início
+          </Button>
+        </LocalizedClientLink>
       </div>
     </div>
   )
