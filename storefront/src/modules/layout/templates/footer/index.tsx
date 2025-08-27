@@ -9,9 +9,9 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 // Ícones simples para formas de pagamento (exemplo)
 const PaymentMethods = () => (
   <div className="flex items-center gap-x-4">
-    <div className="h-8 w-12 bg-gray-700 rounded-md flex items-center justify-center text-xs font-semibold">Visa</div>
-    <div className="h-8 w-12 bg-gray-700 rounded-md flex items-center justify-center text-xs font-semibold">Master</div>
-    <div className="h-8 w-12 bg-gray-700 rounded-md flex items-center justify-center text-xs font-semibold">Pix</div>
+    <div className="h-8 w-12 bg-gray-200 rounded-md flex items-center justify-center text-xs font-semibold text-gray-800">Visa</div>
+    <div className="h-8 w-12 bg-gray-200 rounded-md flex items-center justify-center text-xs font-semibold text-gray-800">Master</div>
+    <div className="h-8 w-12 bg-gray-200 rounded-md flex items-center justify-center text-xs font-semibold text-gray-800">Pix</div>
   </div>
 )
 
@@ -20,7 +20,8 @@ export default async function Footer() {
   const { product_categories } = await getCategoriesList(0, 6)
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    // ALTERADO: Fundo branco e borda superior preta
+    <footer className="bg-white text-gray-800 border-t border-black">
       <div className="content-container flex flex-col w-full">
         {/* Seção Principal do Rodapé */}
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-10 md:gap-y-16 py-16">
@@ -28,29 +29,30 @@ export default async function Footer() {
           {/* Coluna 1: Logo e Redes Sociais */}
           <div className="flex flex-col gap-y-6 lg:col-span-2">
             <LocalizedClientLink href="/" className="w-fit">
+              {/* ALTERADO: Removido 'brightness-0 invert' para a logo aparecer em sua cor original */}
               <Image
-                src="/logo.png" // Use o mesmo logo do header
+                src="/logo.png" 
                 alt="OTH Produtos Logo"
                 width={160}
                 height={45}
-                className="brightness-0 invert" // Inverte as cores do logo para ficar branco
               />
             </LocalizedClientLink>
-            <p className="text-sm text-gray-400 max-w-sm">
+            <p className="text-sm text-gray-600 max-w-sm">
               Sua fonte confiável para produtos de alta qualidade, oferecendo as melhores marcas com entrega rápida e segura em todo o Brasil.
             </p>
             <div className="flex gap-x-4 items-center">
-              <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors"><Facebook size={20} /></a>
-              <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors"><Instagram size={20} /></a>
-              <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-white transition-colors"><Twitter size={20} /></a>
-              <a href="#" aria-label="YouTube" className="text-gray-400 hover:text-white transition-colors"><Youtube size={20} /></a>
+              {/* ALTERADO: Cores dos ícones para preto/hover */}
+              <a href="#" aria-label="Facebook" className="text-gray-600 hover:text-black transition-colors"><Facebook size={20} /></a>
+              <a href="#" aria-label="Instagram" className="text-gray-600 hover:text-black transition-colors"><Instagram size={20} /></a>
+              <a href="#" aria-label="Twitter" className="text-gray-600 hover:text-black transition-colors"><Twitter size={20} /></a>
+              <a href="#" aria-label="YouTube" className="text-gray-600 hover:text-black transition-colors"><Youtube size={20} /></a>
             </div>
           </div>
 
           {/* Coluna 2: Categorias */}
           {product_categories && product_categories?.length > 0 && (
             <div className="flex flex-col gap-y-4">
-              <span className="font-semibold text-white uppercase tracking-wider">
+              <span className="font-semibold text-gray-900 uppercase tracking-wider">
                 Categorias
               </span>
               <ul className="flex flex-col gap-y-2 text-sm">
@@ -61,7 +63,7 @@ export default async function Footer() {
                   return (
                     <li key={c.id}>
                       <LocalizedClientLink
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-gray-600 hover:text-black transition-colors"
                         href={`/categories/${c.handle}`}
                       >
                         {c.name}
@@ -76,14 +78,14 @@ export default async function Footer() {
           {/* Coluna 3: Coleções */}
           {collections && collections.length > 0 && (
             <div className="flex flex-col gap-y-4">
-              <span className="font-semibold text-white uppercase tracking-wider">
+              <span className="font-semibold text-gray-900 uppercase tracking-wider">
                 Coleções
               </span>
               <ul className="flex flex-col gap-y-2 text-sm">
                 {collections?.slice(0, 6).map((c) => (
                   <li key={c.id}>
                     <LocalizedClientLink
-                      className="text-gray-400 hover:text-white transition-colors"
+                      className="text-gray-600 hover:text-black transition-colors"
                       href={`/collections/${c.handle}`}
                     >
                       {c.title}
@@ -96,21 +98,22 @@ export default async function Footer() {
 
           {/* Coluna 4: Atendimento */}
           <div className="flex flex-col gap-y-4">
-            <span className="font-semibold text-white uppercase tracking-wider">Atendimento</span>
+            <span className="font-semibold text-gray-900 uppercase tracking-wider">Atendimento</span>
             <ul className="flex flex-col gap-y-2 text-sm">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Fale Conosco</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Política de Devolução</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Rastrear Pedido</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-black transition-colors">Fale Conosco</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-black transition-colors">FAQ</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-black transition-colors">Política de Devolução</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-black transition-colors">Rastrear Pedido</a></li>
             </ul>
           </div>
         </div>
 
         {/* Barra Inferior: Copyright e Pagamentos */}
-        <div className="flex flex-col md:flex-row w-full py-8 justify-between items-center gap-8 border-t border-gray-800">
+        <div className="flex flex-col md:flex-row w-full py-8 justify-between items-center gap-8 border-t border-gray-200">
           <Text className="text-sm text-gray-500">
             © {new Date().getFullYear()} OTH Produtos. Todos os direitos reservados.
           </Text>
+          {/* ALTERADO: Cores dos ícones de pagamento para combinar com o fundo branco */}
           <PaymentMethods />
         </div>
       </div>
