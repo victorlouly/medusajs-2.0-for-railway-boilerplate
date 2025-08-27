@@ -15,6 +15,7 @@ import BillingAddress from "../billing_address"
 import ErrorMessage from "../error-message"
 import ShippingAddress from "../shipping-address"
 import { SubmitButton } from "../submit-button"
+import { clx } from "@medusajs/ui"
 
 const Addresses = ({
   cart,

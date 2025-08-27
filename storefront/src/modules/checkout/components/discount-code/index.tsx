@@ -71,9 +71,6 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
           </div>
 
           {isOpen && (
-            {/* <Tooltip content="You can add multiple promotion codes">
-              <InformationCircleSolid color="var(--fg-muted)" />
-            </Tooltip> */}
             <>
               <div className="flex gap-2">
                 <Input

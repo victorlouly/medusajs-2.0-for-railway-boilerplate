@@ -65,7 +65,7 @@ const Item = ({ item, type = "full" }: ItemProps) => {
             className="rounded-lg overflow-hidden"
           />
         </LocalizedClientLink>
-      </Table.Cell>
+        </LocalizedClientLink>
 
         {/* Informações do produto */}
         <div className="flex-1 min-w-0">
@@ -126,7 +126,7 @@ const Item = ({ item, type = "full" }: ItemProps) => {
 
               {/* Botão remover */}
               <button
-                onClick={() => handleDelete(item.id)}
+                onClick={() => deleteLineItem(item.id)}
                 className="flex items-center gap-2 text-sm text-red-600 hover:text-red-700 transition-colors"
                 data-testid="product-delete-button"
               >

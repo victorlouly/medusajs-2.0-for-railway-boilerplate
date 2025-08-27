@@ -73,7 +73,6 @@ const CartTemplate = ({
         )}
       </div>
     </div>
-    </div>
   )
 }
 
