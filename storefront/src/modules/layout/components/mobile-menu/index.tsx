@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, ChevronRight, ChevronDown } from "lucide-react"
+import { Menu, X, ChevronRight, ChevronDown, Search } from "lucide-react"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
